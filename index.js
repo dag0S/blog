@@ -9,7 +9,12 @@ import {
 } from "./validations/validations.js";
 import checkAuth from "./utils/checkAuth.js";
 import { login, register, getMe } from "./Controllers/UserController.js";
-import { create, getAll, getOne } from "./Controllers/PostController.js";
+import {
+  create,
+  getAll,
+  getOne,
+  remove,
+} from "./Controllers/PostController.js";
 
 // Подключение к MongoDB
 mongoose
@@ -41,7 +46,7 @@ app.get("/posts/:id", getOne);
 // Создать пост
 app.post("/posts", checkAuth, postCreateValidation, create);
 // Удалить пост
-// app.delete("/posts", remove);
+app.delete("/posts/:id", checkAuth, remove);
 // Обновить пост
 // app.patch("/posts", update);
 
