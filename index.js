@@ -5,10 +5,11 @@ import "dotenv/config";
 import {
   registerValidation,
   loginValidation,
+  postCreateValidation,
 } from "./validations/validations.js";
 import checkAuth from "./utils/checkAuth.js";
 import { login, register, getMe } from "./Controllers/UserController.js";
-import { create } from "./Controllers/PostController.js";
+import { create, getAll, getOne } from "./Controllers/PostController.js";
 
 // Подключение к MongoDB
 mongoose
@@ -34,11 +35,11 @@ app.post("/auth/register", registerValidation, register);
 app.get("/auth/me", checkAuth, getMe);
 
 // Получить все посты
-// app.get("/posts", getAll);
+app.get("/posts", getAll);
 // Получить инфу о пользователе
-// app.get("/posts/:id", getOne);
+app.get("/posts/:id", getOne);
 // Создать пост
-app.post("/posts", create);
+app.post("/posts", checkAuth, postCreateValidation, create);
 // Удалить пост
 // app.delete("/posts", remove);
 // Обновить пост
