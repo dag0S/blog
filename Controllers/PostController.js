@@ -95,3 +95,32 @@ export const create = async (req, res) => {
     });
   }
 };
+
+// Обновить статью
+export const update = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    await PostModel.updateOne(
+      {
+        _id: postId,
+      },
+      {
+        title: req.body.title,
+        text: req.body.text,
+        imageUrl: req.body.title,
+        tags: req.body.tags,
+        user: req.userId,
+      }
+    );
+
+    res.json({
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Не удалось обновить статью",
+    });
+  }
+};

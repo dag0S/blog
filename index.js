@@ -14,6 +14,7 @@ import {
   getAll,
   getOne,
   remove,
+  update,
 } from "./Controllers/PostController.js";
 
 // Подключение к MongoDB
@@ -48,7 +49,7 @@ app.post("/posts", checkAuth, postCreateValidation, create);
 // Удалить пост
 app.delete("/posts/:id", checkAuth, remove);
 // Обновить пост
-// app.patch("/posts", update);
+app.patch("/posts/:id", checkAuth, update);
 
 // Слушатель порта 4444
 app.listen(process.env.PORT, (err) => {
