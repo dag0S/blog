@@ -2,7 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 
-import { registerValidation } from "./validations/auth.js";
+import {
+  registerValidation,
+  loginValidation,
+} from "./validations/validations.js";
 import checkAuth from "./utils/checkAuth.js";
 import { login, register, getMe } from "./Controllers/UserController.js";
 
@@ -23,7 +26,7 @@ const app = express();
 app.use(express.json());
 
 // Логин
-app.post("/auth/login", login);
+app.post("/auth/login", loginValidation, login);
 
 // Регистрация
 app.post("/auth/register", registerValidation, register);
@@ -38,5 +41,3 @@ app.listen(process.env.PORT, (err) => {
   }
   console.log("Server OK");
 });
-
-// 1: 20
