@@ -65,6 +65,9 @@ app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   });
 });
 
+// Получить все тэги
+app.get("/tags", PostController.getLastTags);
+
 // Получить все посты
 app.get("/posts", PostController.getAll);
 // Получить инфу о пользователе
