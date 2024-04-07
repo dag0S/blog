@@ -99,7 +99,7 @@ export const create = async (req, res) => {
     const doc = new PostModel({
       title: req.body.title,
       text: req.body.text,
-      imageUrl: req.body.title,
+      imageUrl: req.body.imageUrl,
       tags: req.body.tags,
       user: req.userId,
     });
@@ -127,7 +127,7 @@ export const update = async (req, res) => {
       {
         title: req.body.title,
         text: req.body.text,
-        imageUrl: req.body.title,
+        imageUrl: req.body.imageUrl,
         tags: req.body.tags,
         user: req.userId,
       }
