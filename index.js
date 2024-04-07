@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import multer from "multer";
 import "dotenv/config";
 
 import {
@@ -30,8 +31,22 @@ mongoose
 // Создание сервера
 const app = express();
 
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (_, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({
+  storage,
+});
+
 // Чтение json
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 // Логин
 app.post("/auth/login", loginValidation, login);
@@ -39,6 +54,12 @@ app.post("/auth/login", loginValidation, login);
 app.post("/auth/register", registerValidation, register);
 // Получить инфу о пользователе
 app.get("/auth/me", checkAuth, getMe);
+
+app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
+  res.json({
+    url: `/uploads/${req.file.originalname}`,
+  });
+});
 
 // Получить все посты
 app.get("/posts", getAll);
@@ -49,7 +70,7 @@ app.post("/posts", checkAuth, postCreateValidation, create);
 // Удалить пост
 app.delete("/posts/:id", checkAuth, remove);
 // Обновить пост
-app.patch("/posts/:id", checkAuth, update);
+app.patch("/posts/:id", postCreateValidation, checkAuth, update);
 
 // Слушатель порта 4444
 app.listen(process.env.PORT, (err) => {
@@ -58,3 +79,5 @@ app.listen(process.env.PORT, (err) => {
   }
   console.log("Server OK");
 });
+
+// 1: 50

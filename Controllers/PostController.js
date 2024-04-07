@@ -34,7 +34,7 @@ export const getOne = async (req, res) => {
     );
 
     if (!post) {
-      res.status(500).json({
+      return res.status(500).json({
         message: "Не удалось получить статью",
       });
     }
