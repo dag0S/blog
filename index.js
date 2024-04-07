@@ -17,6 +17,7 @@ import {
   remove,
   update,
 } from "./Controllers/PostController.js";
+import handleValidationErrors from "./utils/handleValidationErrors.js";
 
 // Подключение к MongoDB
 mongoose
@@ -49,9 +50,14 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // Логин
-app.post("/auth/login", loginValidation, login);
+app.post("/auth/login", loginValidation, handleValidationErrors, login);
 // Регистрация
-app.post("/auth/register", registerValidation, register);
+app.post(
+  "/auth/register",
+  registerValidation,
+  handleValidationErrors,
+  register
+);
 // Получить инфу о пользователе
 app.get("/auth/me", checkAuth, getMe);
 
@@ -66,11 +72,23 @@ app.get("/posts", getAll);
 // Получить инфу о пользователе
 app.get("/posts/:id", getOne);
 // Создать пост
-app.post("/posts", checkAuth, postCreateValidation, create);
+app.post(
+  "/posts",
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  create
+);
 // Удалить пост
 app.delete("/posts/:id", checkAuth, remove);
 // Обновить пост
-app.patch("/posts/:id", postCreateValidation, checkAuth, update);
+app.patch(
+  "/posts/:id",
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  update
+);
 
 // Слушатель порта 4444
 app.listen(process.env.PORT, (err) => {
