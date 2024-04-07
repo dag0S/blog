@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 import "dotenv/config";
+import cors from "cors";
 
 import {
   registerValidation,
@@ -9,7 +10,7 @@ import {
   postCreateValidation,
 } from "./validations/validations.js";
 import { UserController, PostController } from "./Controllers/index.js";
-import {checkAuth, handleValidationErrors} from "./utils/index.js";
+import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 // Подключение к MongoDB
 mongoose
@@ -37,8 +38,8 @@ const upload = multer({
   storage,
 });
 
-// Чтение json
 app.use(express.json());
+app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
 // Логин
@@ -94,5 +95,3 @@ app.listen(process.env.PORT, (err) => {
   }
   console.log("Server OK");
 });
-
-// 1: 50
