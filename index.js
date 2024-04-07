@@ -8,16 +8,8 @@ import {
   loginValidation,
   postCreateValidation,
 } from "./validations/validations.js";
-import checkAuth from "./utils/checkAuth.js";
-import { login, register, getMe } from "./Controllers/UserController.js";
-import {
-  create,
-  getAll,
-  getOne,
-  remove,
-  update,
-} from "./Controllers/PostController.js";
-import handleValidationErrors from "./utils/handleValidationErrors.js";
+import { UserController, PostController } from "./Controllers/index.js";
+import {checkAuth, handleValidationErrors} from "./utils/index.js";
 
 // Подключение к MongoDB
 mongoose
@@ -50,16 +42,21 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // Логин
-app.post("/auth/login", loginValidation, handleValidationErrors, login);
+app.post(
+  "/auth/login",
+  loginValidation,
+  handleValidationErrors,
+  UserController.login
+);
 // Регистрация
 app.post(
   "/auth/register",
   registerValidation,
   handleValidationErrors,
-  register
+  UserController.register
 );
 // Получить инфу о пользователе
-app.get("/auth/me", checkAuth, getMe);
+app.get("/auth/me", checkAuth, UserController.getMe);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   res.json({
@@ -68,26 +65,26 @@ app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
 });
 
 // Получить все посты
-app.get("/posts", getAll);
+app.get("/posts", PostController.getAll);
 // Получить инфу о пользователе
-app.get("/posts/:id", getOne);
+app.get("/posts/:id", PostController.getOne);
 // Создать пост
 app.post(
   "/posts",
   checkAuth,
   postCreateValidation,
   handleValidationErrors,
-  create
+  PostController.create
 );
 // Удалить пост
-app.delete("/posts/:id", checkAuth, remove);
+app.delete("/posts/:id", checkAuth, PostController.remove);
 // Обновить пост
 app.patch(
   "/posts/:id",
   checkAuth,
   postCreateValidation,
   handleValidationErrors,
-  update
+  PostController.update
 );
 
 // Слушатель порта 4444
